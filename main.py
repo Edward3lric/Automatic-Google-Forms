@@ -65,5 +65,9 @@ entry_2.pack(pady=10, padx=10)
 button_1 = customtkinter.CTkButton(master=frame_1, text="Enviar", command=enviar)
 button_1.pack(pady=10, padx=10)
 
+# Copyright
+autor = customtkinter.CTkLabel(master=frame_1, text="Create by: Melchor Ruiz", anchor='e', justify='right', width=350)
+autor.pack(pady=10, padx=10)
+
 # Ciclar aplicacion
 app.mainloop()
