@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 import time
 from random import choice
 
@@ -40,19 +41,18 @@ def enviar_form(url, driver):
     time.sleep(2)
 
 
-def ataque(url, repeticiones):
+def obtener_driver():
     # Ruta del controlador del navegador 
     DRIVER_PATH = ".\chromedriver.exe"
 
+    options = Options()
+    options.add_argument("--headless")
+
     # Inicializar el navegador
-    driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+    driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=options)
 
-    # Ejecutar la funcion de enviar form
-    for a in range(0, repeticiones):
-        enviar_form(url, driver)
+    return driver
 
-    # Cerrar el navegador
-    driver.quit()
 
 if __name__ == "__main__":
-    ataque("https://forms.gle/rZWk8ss1sFXrZ3bU7", 1)
+    pass
