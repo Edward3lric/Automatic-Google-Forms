@@ -1,4 +1,4 @@
-from forms import obtener_driver, enviar_form
+from forms import abrir_nav, enviar_form, cerrar_nav
 import customtkinter
 from tkinter import messagebox
 
@@ -35,14 +35,18 @@ def enviar():
     
     # Iniciar procedimientos
     if url_check and repeticiones_check:
-        # Funcion para obtener el driver
-        driver = obtener_driver()
+        # Funcion para iniciar el navegador
+        abrir_nav()
 
         # Repetir la funcion de enviar formulario
         # tantas veces como el usuario decida
         for a in range(0, repeticiones):
-            enviar_form(url, driver)
+            enviar_form(url)
 
+        # Funcion para cerrar el navegador
+        cerrar_nav()
+        
+        # Mensaje de tarea finalizada
         messagebox.showinfo("Tarea Teminada", "Tarea Terminada con Exito")
         
 # Crar el frame principal de la aplicacion
