@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 from random import choice, randint
 
@@ -17,6 +18,8 @@ def enviar_form(url):
     opcion_multiple()
     # Casillas de Verificacion
     casillas_verificacion()
+    # Lista desplegable
+    lista_desplegable()
 
     # Encontrar boton de enviar
     boton_enviar = driver.find_element(By.CLASS_NAME, "lRwqcd")
@@ -66,6 +69,30 @@ def casillas_verificacion():
 
     except Exception as e:
         print(f'Error: {e}')
+
+def lista_desplegable():
+    try:
+        # Encontrar todoas las preguntas
+        preguntas = driver.find_elements(By.CLASS_NAME, "jgvuAb")
+
+        # Ciclar preguntas
+        for pregunta in preguntas:
+            
+            # Desplegar la lista de opciones
+            pregunta.find_element(By.TAG_NAME, "div").click()
+            time.sleep(1)
+
+            # Generar arreglo de todas las respuestas posibles
+            respuestas = pregunta.find_element(By.CLASS_NAME, "OA0qNb").find_elements(By.CLASS_NAME, "MocG8c")
+            respuestas.pop(0)
+            
+            # Elegir una respuesta aleatoria y seleccionarla
+            choice(respuestas).click()
+            time.sleep(1)
+
+    except Exception as e:
+        print(f'Error: {e}')
+
 
 def abrir_nav():
     # Ruta del controlador del navegador 
