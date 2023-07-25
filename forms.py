@@ -3,7 +3,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
-import time
+from time import sleep
+from string import ascii_letters
 from random import choice, randint
 
 def enviar_form(url):
@@ -11,13 +12,15 @@ def enviar_form(url):
     driver.get(url)
 
     # Esperar un momento
-    time.sleep(1)
+    sleep(1)
 
     # Responder preguntas correspondientes a cada categoria
     # Opcion Multiple
     opcion_multiple()
     # Casillas de Verificacion
     casillas_verificacion()
+    # Preguna abierta
+    input_text()
     # Lista desplegable
     lista_desplegable()
 
@@ -29,7 +32,7 @@ def enviar_form(url):
     boton_enviar.click()
 
     # Esperar un momento
-    time.sleep(1)
+    sleep(1)
 
 def opcion_multiple():
     try:
@@ -80,7 +83,7 @@ def lista_desplegable():
             
             # Desplegar la lista de opciones
             pregunta.find_element(By.TAG_NAME, "div").click()
-            time.sleep(1)
+            sleep(1)
 
             # Generar arreglo de todas las respuestas posibles
             respuestas = pregunta.find_element(By.CLASS_NAME, "OA0qNb").find_elements(By.CLASS_NAME, "MocG8c")
@@ -88,18 +91,34 @@ def lista_desplegable():
             
             # Elegir una respuesta aleatoria y seleccionarla
             choice(respuestas).click()
-            time.sleep(1)
+            sleep(1)
 
     except Exception as e:
         print(f'Error: {e}')
 
+def input_text():
+    letras = ascii_letters
+    try:
+        # Encontrar todoas las preguntas
+        preguntas = driver.find_elements(By.CSS_SELECTOR, 'input[type="text"]')
+        preguntas += driver.find_elements(By.TAG_NAME, "textarea")
+
+        # Ciclar preguntas
+        for pregunta in preguntas:
+            # Generar un texto aleatoria de 15 letras
+            texto = ''.join(choice(letras) for a in range(20))
+            # Escribir el texto dentro del input
+            pregunta.send_keys(texto)
+
+    except Exception as e:
+        print(f'Error: {e}')
 
 def abrir_nav():
     # Ruta del controlador del navegador 
     DRIVER_PATH = ".\chromedriver.exe"
 
     options = Options()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
 
     # Inicializar el navegador en la variable driver
     global driver
@@ -109,4 +128,5 @@ def cerrar_nav():
     driver.quit()
 
 if __name__ == "__main__":
-    pass
+    abrir_nav()
+    enviar_form("https://forms.gle/QeQwZrfShZ9rV3EDA")
