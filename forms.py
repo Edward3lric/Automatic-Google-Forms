@@ -23,6 +23,10 @@ def enviar_form(url):
     input_text()
     # Escala lineal
     escala_lineal()
+    # Cuadricula de opción multiple
+    cuadricula_opcion_multiple()
+    # Cuadricula de casillas de verificacion
+    cuadricula_casillas_verificacion()
     # Lista desplegable
     lista_desplegable()
 
@@ -136,6 +140,43 @@ def escala_lineal():
 
     except Exception as e:
         print(f'Error: {e}')
+
+def cuadricula_opcion_multiple():
+    try:
+        # Encontrar todoas las preguntas
+        lineas = driver.find_elements(By.CSS_SELECTOR, ".lLfZXe.EzyPc")
+
+        # Ciclar preguntas
+        for linea in lineas:
+            # Encontrar el elemento div por su nombre de clase
+            respuestas = linea.find_elements(By.CLASS_NAME, "d7L4fc")
+
+            # Elegir una respuesta aleatoria y seleccionarla
+            choice(respuestas).click()
+
+    except Exception as e:
+        print(f'Error: {e}')
+
+def cuadricula_casillas_verificacion():
+    try:
+        # Encontrar todoas las preguntas
+        lineas = driver.find_elements(By.CSS_SELECTOR, ".EzyPc.mxSrOe")
+
+        # Ciclar preguntas
+        for linea in lineas:
+            # Encontrar el elemento div por su nombre de clase
+            respuestas = linea.find_elements(By.CLASS_NAME, "uHMk6b")
+
+            # Ciclar posibles respuestas
+            for respuesta in respuestas:
+                # Eligir respuestas
+                if bool(randint(0, 1)):
+                    # Hacer clik si salio eligida
+                    respuesta.click()
+    
+    except Exception as e:
+        print(f'Error: {e}')
+
 
 def abrir_nav():
     # Ruta del controlador del navegador 
