@@ -21,6 +21,8 @@ def enviar_form(url):
     casillas_verificacion()
     # Preguna abierta
     input_text()
+    # Escala lineal
+    escala_lineal()
     # Lista desplegable
     lista_desplegable()
 
@@ -29,7 +31,7 @@ def enviar_form(url):
     boton_enviar = boton_enviar.find_element(By.TAG_NAME, "div")
 
     # Hacer click en enviar
-    boton_enviar.click()
+    #boton_enviar.click()
 
     # Esperar un momento
     sleep(1)
@@ -100,15 +102,37 @@ def input_text():
     letras = ascii_letters
     try:
         # Encontrar todoas las preguntas
-        preguntas = driver.find_elements(By.CSS_SELECTOR, 'input[type="text"]')
+        preguntas = driver.find_elements(By.CSS_SELECTOR, '.AgroKb input[type="text"]')
         preguntas += driver.find_elements(By.TAG_NAME, "textarea")
 
         # Ciclar preguntas
         for pregunta in preguntas:
-            # Generar un texto aleatoria de 15 letras
+            # Generar un texto aleatoria de 20 letras
             texto = ''.join(choice(letras) for a in range(20))
             # Escribir el texto dentro del input
             pregunta.send_keys(texto)
+
+    except Exception as e:
+        print(f'Error: {e}')
+
+def escala_lineal():
+    try:
+        # Encontrar todoas las preguntas
+        preguntas = driver.find_elements(By.CLASS_NAME, "N9Qcwe")
+
+        # Ciclar preguntas
+        for pregunta in preguntas:
+            # Encontrar el elemento div por su nombre de clase
+            respuestas = pregunta.find_elements(By.CLASS_NAME, "T5pZmf")
+
+            # Elegir respuesta
+            respuesta_final = choice(respuestas)
+
+            # Encontrar zona donde hacer click
+            respuesta_final = respuesta_final.find_element(By.CLASS_NAME, "Od2TWd")
+
+            # Hacer clic en la respuseta final
+            respuesta_final.click()
 
     except Exception as e:
         print(f'Error: {e}')
