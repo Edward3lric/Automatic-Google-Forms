@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
 from time import sleep
 from string import ascii_letters
 from random import choice, randint
@@ -27,6 +26,10 @@ def enviar_form(url):
     cuadricula_opcion_multiple()
     # Cuadricula de casillas de verificacion
     cuadricula_casillas_verificacion()
+    # Fechas
+    fecha()
+    # Horas
+    hora()
     # Lista desplegable
     lista_desplegable()
 
@@ -35,7 +38,7 @@ def enviar_form(url):
     boton_enviar = boton_enviar.find_element(By.TAG_NAME, "div")
 
     # Hacer click en enviar
-    #boton_enviar.click()
+    boton_enviar.click()
 
     # Esperar un momento
     sleep(1)
@@ -89,7 +92,7 @@ def lista_desplegable():
             
             # Desplegar la lista de opciones
             pregunta.find_element(By.TAG_NAME, "div").click()
-            sleep(1)
+            sleep(0.5)
 
             # Generar arreglo de todas las respuestas posibles
             respuestas = pregunta.find_element(By.CLASS_NAME, "OA0qNb").find_elements(By.CLASS_NAME, "MocG8c")
@@ -97,7 +100,7 @@ def lista_desplegable():
             
             # Elegir una respuesta aleatoria y seleccionarla
             choice(respuestas).click()
-            sleep(1)
+            sleep(0.5)
 
     except Exception as e:
         print(f'Error: {e}')
@@ -177,13 +180,70 @@ def cuadricula_casillas_verificacion():
     except Exception as e:
         print(f'Error: {e}')
 
+def fecha():
+    try:
+        # Encontrar todoas las preguntas
+        preguntas = driver.find_elements(By.CSS_SELECTOR, 'input[type="date"]')
+
+        # Ciclar preguntas
+        for pregunta in preguntas:
+            # Escribir el texto dentro del input
+            pregunta.send_keys(generar_fecha_aleatoria())
+
+    except Exception as e:
+        print(f'Error: {e}')
+
+def hora():
+    try:
+        # Encontrar todoas las preguntas
+        preguntas = driver.find_elements(By.CLASS_NAME, "PfQ8Lb")
+
+        # Ciclar preguntas
+        for pregunta in preguntas:
+            # Encontrar los inputs de texto
+            inputs = pregunta.find_elements(By.CSS_SELECTOR, 'input[type="text"]')
+
+            # Responder el primer valor
+            inputs[0].send_keys(f"{(randint(0, 23)):02d}")
+            # Responder el segudno valor
+            inputs[1].send_keys(f"{(randint(0, 59)):02d}")
+    
+    except Exception as e:
+        print(f'Error: {e}')
+
+def generar_fecha_aleatoria():
+        # Generar un año aleatorio entre 1900 y 2100
+        anio = randint(1900, 2070)
+
+        # Generar un mes aleatorio entre 1 y 12
+        mes = randint(1, 12)
+
+        # Generar un día aleatorio, teniendo en cuenta la cantidad de días en el mes seleccionado
+        if mes in [1, 3, 5, 7, 8, 10, 12]:
+            dia = randint(1, 31)
+        elif mes in [4, 6, 9, 11]:
+            dia = randint(1, 30)
+        else:
+            # Si es febrero (mes 2), considerar si el año es bisiesto o no (divisible por 4 pero no por 100, o divisible por 400)
+            if (anio % 4 == 0 and anio % 100 != 0) or anio % 400 == 0:
+                dia = randint(1, 29)
+            else:
+                dia = randint(1, 28)
+
+        # Formatear la fecha en el formato "dd/mm/aaaa"
+        fecha_aleatoria = f"{dia:02d}/{mes:02d}/{anio:04d}"
+
+        return fecha_aleatoria
+
 
 def abrir_nav():
     # Ruta del controlador del navegador 
     DRIVER_PATH = ".\chromedriver.exe"
 
+    # Añadir opciones para el navegador
     options = Options()
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
+    options.add_argument("--incognito")
 
     # Inicializar el navegador en la variable driver
     global driver
@@ -193,5 +253,4 @@ def cerrar_nav():
     driver.quit()
 
 if __name__ == "__main__":
-    abrir_nav()
-    enviar_form("https://forms.gle/QeQwZrfShZ9rV3EDA")
+    pass
